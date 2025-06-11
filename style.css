@@ -59,3 +59,19 @@ body {
     background: #ff0099;
     color: #120458;
 }
+
+#game-container {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+}
+
+#game-canvas {
+    flex: 1;
+    max-height: calc(100vh - 200px);
+    border: 2px solid #ff0099;
+    border-radius: 8px;
+    box-shadow: 0 0 20px #ff0099;
+    margin: 0 auto;
+}
