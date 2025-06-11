@@ -304,6 +304,15 @@ function setupControls() {
         }
     });
 
+    window.addEventListener('keyup', e => {
+        switch(e.key.toLowerCase()) {
+            case 'w': wPressed = false; break;
+            case 's': sPressed = false; break;
+            case 'arrowup': upArrowPressed = false; break;
+            case 'arrowdown': downArrowPressed = false; break;
+        }
+    });
+
     const touchControls = {
         'left-up': () => wPressed = true,
         'left-down': () => sPressed = true,
@@ -329,15 +338,6 @@ function setupControls() {
             e.preventDefault();
             touchReset[id]();
         });
-    });
-
-    window.addEventListener('keyup', e => {
-        switch(e.key.toLowerCase()) {
-            case 'w': wPressed = false; break;
-            case 's': sPressed = false; break;
-            case 'arrowup': upArrowPressed = false; break;
-            case 'arrowdown': downArrowPressed = false; break;
-        }
     });
 }
 

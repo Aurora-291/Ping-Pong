@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-arcade">
+    <div id="orientation-warning">
+        <div class="warning-content">
+            <div class="warning-icon">📱</div>
+            <h2>Rotate Your Device</h2>
+            <p>Switch to landscape mode to play</p>
+        </div>
+    </div>
+
     <div id="game-wrapper">
         <div id="main-menu" class="menu-screen active">
             <div class="menu-content">
@@ -50,6 +58,17 @@
             </div>
 
             <canvas id="game-canvas"></canvas>
+
+            <div id="mobile-controls">
+                <div class="control-pad">
+                    <button id="left-up" class="control-btn">↑</button>
+                    <button id="left-down" class="control-btn">↓</button>
+                </div>
+                <div class="control-pad">
+                    <button id="right-up" class="control-btn">↑</button>
+                    <button id="right-down" class="control-btn">↓</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
