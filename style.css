@@ -1,0 +1,61 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    background-color: #120458;
+}
+
+#game-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-screen {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background-color: #120458;
+}
+
+.menu-screen.active {
+    display: flex;
+}
+
+.menu-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.game-title {
+    font-size: min(15vw, 4em);
+    margin-bottom: 40px;
+    color: #ff0099;
+    text-shadow: 0 0 10px #ff0099;
+}
+
+.arcade-btn {
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 1.5em;
+    background: none;
+    border: 2px solid #ff0099;
+    color: #ff0099;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.arcade-btn:hover {
+    background: #ff0099;
+    color: #120458;
+}
