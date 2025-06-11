@@ -35,7 +35,7 @@ function resetBall() {
 
 function drawNet() {
     for(let i = 0; i <= canvas.height; i += 15) {
-        ctx.fillStyle = '#ff0099';
+        ctx.fillStyle = currentTheme.net;
         ctx.fillRect(net.x, i, net.width, 10);
     }
 }
@@ -46,7 +46,7 @@ function drawPaddle(x, y, width, height, color) {
 }
 
 function drawBall() {
-    ctx.fillStyle = '#00ff00';
+    ctx.fillStyle = currentTheme.ball;
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
     ctx.closePath();
@@ -120,6 +120,41 @@ const ball = {
     velocityY: 5,
     inPlay: false
 };
+
+const themes = {
+    arcade: {
+        background: '#120458',
+        paddle: '#ff0099',
+        ball: '#00ff00',
+        net: '#ff0099'
+    },
+    synthwave: {
+        background: '#1a0f33',
+        paddle: '#ff00ff',
+        ball: '#00ffff',
+        net: '#ff00ff'
+    },
+    matrix: {
+        background: '#000000',
+        paddle: '#00ff00',
+        ball: '#00ff00',
+        net: '#003300'
+    },
+    light: {
+        background: '#f5f5f5',
+        paddle: '#2196f3',
+        ball: '#03a9f4',
+        net: '#2196f3'
+    },
+    dark: {
+        background: '#121212',
+        paddle: '#bb86fc',
+        ball: '#03dac6',
+        net: '#bb86fc'
+    }
+};
+
+let currentTheme = themes.arcade;
 
 function startGame() {
     if(!gameStarted) {

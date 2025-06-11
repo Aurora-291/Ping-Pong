@@ -6,7 +6,7 @@
     <title>Ping Pong</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="theme-arcade">
     <div id="game-wrapper">
         <div id="main-menu" class="menu-screen active">
             <div class="menu-content">
@@ -19,6 +19,20 @@
 
         <div id="game-container">
             <div class="game-header">
+                <div class="theme-buttons">
+                    <button class="theme-btn arcade active" data-theme="arcade">Arcade</button>
+                    <button class="theme-btn synthwave" data-theme="synthwave">Synthwave</button>
+                    <button class="theme-btn matrix" data-theme="matrix">Matrix</button>
+                    <button class="theme-btn light" data-theme="light">Light</button>
+                    <button class="theme-btn dark" data-theme="dark">Dark</button>
+                </div>
+                <div class="score-display">
+                    <span class="player-label">PLAYER 1</span>
+                    <span id="player-score">0</span>
+                    <span>:</span>
+                    <span id="ai-score">0</span>
+                    <span id="right-player" class="player-label">CPU</span>
+                </div>
                 <div class="game-buttons">
                     <button id="start-btn">START</button>
                     <button id="pause-btn">PAUSE</button>
