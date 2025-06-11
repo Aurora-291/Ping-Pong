@@ -304,6 +304,33 @@ function setupControls() {
         }
     });
 
+    const touchControls = {
+        'left-up': () => wPressed = true,
+        'left-down': () => sPressed = true,
+        'right-up': () => upArrowPressed = true,
+        'right-down': () => downArrowPressed = true
+    };
+
+    const touchReset = {
+        'left-up': () => wPressed = false,
+        'left-down': () => sPressed = false,
+        'right-up': () => upArrowPressed = false,
+        'right-down': () => downArrowPressed = false
+    };
+
+    Object.keys(touchControls).forEach(id => {
+        const element = document.getElementById(id);
+        element.addEventListener('touchstart', e => {
+            e.preventDefault();
+            touchControls[id]();
+        });
+        
+        element.addEventListener('touchend', e => {
+            e.preventDefault();
+            touchReset[id]();
+        });
+    });
+
     window.addEventListener('keyup', e => {
         switch(e.key.toLowerCase()) {
             case 'w': wPressed = false; break;
