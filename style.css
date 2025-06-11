@@ -15,6 +15,7 @@
     --dark-secondary: #03dac6;
     --dark-bg: #121212;
 }
+
 * {
     margin: 0;
     padding: 0;
@@ -77,57 +78,20 @@ body {
     color: var(--bg);
 }
 
+.controls-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    color: var(--primary);
+}
+
 #game-container {
     display: none;
     flex-direction: column;
     height: 100vh;
     padding: 20px;
 }
-
-#game-canvas {
-    flex: 1;
-    max-height: calc(100vh - 200px);
-    border: 2px solid var(--primary);
-    border-radius: 8px;
-    box-shadow: 0 0 20px var(--primary);
-    margin: 0 auto;
-}
-
-.theme-arcade {
-    --primary: var(--arcade-primary);
-    --secondary: var(--arcade-secondary);
-    --bg: var(--arcade-bg);
-}
-
-.theme-synthwave {
-    --primary: var(--synthwave-primary);
-    --secondary: var(--synthwave-secondary);
-    --bg: var(--synthwave-bg);
-}
-
-.theme-matrix {
-    --primary: var(--matrix-primary);
-    --secondary: var(--matrix-secondary);
-    --bg: var(--matrix-bg);
-}
-
-.theme-light {
-    --primary: var(--light-primary);
-    --secondary: var(--light-secondary);
-    --bg: var(--light-bg);
-}
-
-.theme-dark {
-    --primary: var(--dark-primary);
-    --secondary: var(--dark-secondary);
-    --bg: var(--dark-bg);
-}
-
-.theme-btn.arcade { background-color: var(--arcade-primary); }
-.theme-btn.synthwave { background-color: var(--synthwave-primary); }
-.theme-btn.matrix { background-color: var(--matrix-primary); }
-.theme-btn.light { background-color: var(--light-primary); }
-.theme-btn.dark { background-color: var(--dark-primary); }
 
 .game-header {
     display: grid;
@@ -182,3 +146,48 @@ body {
     background: var(--primary);
     color: var(--bg);
 }
+
+#game-canvas {
+    flex: 1;
+    max-height: calc(100vh - 200px);
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    box-shadow: 0 0 20px var(--primary);
+    margin: 0 auto;
+}
+
+.theme-arcade {
+    --primary: var(--arcade-primary);
+    --secondary: var(--arcade-secondary);
+    --bg: var(--arcade-bg);
+}
+
+.theme-synthwave {
+    --primary: var(--synthwave-primary);
+    --secondary: var(--synthwave-secondary);
+    --bg: var(--synthwave-bg);
+}
+
+.theme-matrix {
+    --primary: var(--matrix-primary);
+    --secondary: var(--matrix-secondary);
+    --bg: var(--matrix-bg);
+}
+
+.theme-light {
+    --primary: var(--light-primary);
+    --secondary: var(--light-secondary);
+    --bg: var(--light-bg);
+}
+
+.theme-dark {
+    --primary: var(--dark-primary);
+    --secondary: var(--dark-secondary);
+    --bg: var(--dark-bg);
+}
+
+.theme-btn.arcade { background-color: var(--arcade-primary); }
+.theme-btn.synthwave { background-color: var(--synthwave-primary); }
+.theme-btn.matrix { background-color: var(--matrix-primary); }
+.theme-btn.light { background-color: var(--light-primary); }
+.theme-btn.dark { background-color: var(--dark-primary); }

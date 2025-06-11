@@ -3,6 +3,86 @@ const ctx = canvas.getContext('2d');
 
 let isTwoPlayer = false;
 let rightPlayerIsHuman = false;
+let gameStarted = false;
+let gamePaused = false;
+let difficultyLevel = 0.09;
+let lastScoreTime = 0;
+let scoreDelay = 1000;
+
+const hitSound = new Audio('https://raw.githubusercontent.com/the-coding-pie/Ping-Pong-Javascript/master/sounds/hitSound.wav');
+const scoreSound = new Audio('https://raw.githubusercontent.com/the-coding-pie/Ping-Pong-Javascript/master/sounds/scoreSound.wav');
+const wallHitSound = new Audio('https://raw.githubusercontent.com/the-coding-pie/Ping-Pong-Javascript/master/sounds/wallHitSound.wav');
+
+const themes = {
+    arcade: {
+        background: '#120458',
+        paddle: '#ff0099',
+        ball: '#00ff00',
+        net: '#ff0099'
+    },
+    synthwave: {
+        background: '#1a0f33',
+        paddle: '#ff00ff',
+        ball: '#00ffff',
+        net: '#ff00ff'
+    },
+    matrix: {
+        background: '#000000',
+        paddle: '#00ff00',
+        ball: '#00ff00',
+        net: '#003300'
+    },
+    light: {
+        background: '#f5f5f5',
+        paddle: '#2196f3',
+        ball: '#03a9f4',
+        net: '#2196f3'
+    },
+    dark: {
+        background: '#121212',
+        paddle: '#bb86fc',
+        ball: '#03dac6',
+        net: '#bb86fc'
+    }
+};
+
+let currentTheme = themes.arcade;
+
+const net = {
+    x: 0,
+    y: 0,
+    width: 4,
+    height: 0
+};
+
+const user = {
+    x: 0,
+    y: 0,
+    width: 10,
+    height: 100,
+    score: 0,
+    speed: 8
+};
+
+const ai = {
+    x: 0,
+    y: 0,
+    width: 10,
+    height: 100,
+    score: 0,
+    speed: 8
+};
+
+const ball = {
+    x: 0,
+    y: 0,
+    radius: 7,
+    speed: 7,
+    velocityX: 5,
+    velocityY: 5,
+    inPlay: false
+};
+
 let upArrowPressed = false;
 let downArrowPressed = false;
 let wPressed = false;
@@ -53,171 +133,6 @@ function drawBall() {
     ctx.fill();
 }
 
-function render() {
-    ctx.fillStyle = '#120458';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    drawNet();
-    drawPaddle(user.x, user.y, user.width, user.height, '#ff0099');
-    drawPaddle(ai.x, ai.y, ai.width, ai.height, '#ff0099');
-    drawBall();
-}
-
-document.getElementById('one-player').addEventListener('click', () => {
-    isTwoPlayer = false;
-    rightPlayerIsHuman = false;
-    document.getElementById('main-menu').classList.remove('active');
-    document.getElementById('game-container').style.display = 'flex';
-    initCanvas();
-});
-
-document.getElementById('two-player').addEventListener('click', () => {
-    isTwoPlayer = true;
-    rightPlayerIsHuman = true;
-    document.getElementById('right-player').textContent = 'PLAYER 2';
-    document.getElementById('main-menu').classList.remove('active');
-    document.getElementById('game-container').style.display = 'flex';
-    initCanvas();
-});
-
-window.addEventListener('resize', initCanvas);
-initCanvas();
-
-let gameStarted = false;
-let gamePaused = false;
-
-const net = {
-    x: 0,
-    y: 0,
-    width: 4,
-    height: 0
-};
-
-const user = {
-    x: 0,
-    y: 0,
-    width: 10,
-    height: 100,
-    score: 0,
-    speed: 8
-};
-
-const ai = {
-    x: 0,
-    y: 0,
-    width: 10,
-    height: 100,
-    score: 0,
-    speed: 8
-};
-
-const ball = {
-    x: 0,
-    y: 0,
-    radius: 7,
-    speed: 7,
-    velocityX: 5,
-    velocityY: 5,
-    inPlay: false
-};
-
-const themes = {
-    arcade: {
-        background: '#120458',
-        paddle: '#ff0099',
-        ball: '#00ff00',
-        net: '#ff0099'
-    },
-    synthwave: {
-        background: '#1a0f33',
-        paddle: '#ff00ff',
-        ball: '#00ffff',
-        net: '#ff00ff'
-    },
-    matrix: {
-        background: '#000000',
-        paddle: '#00ff00',
-        ball: '#00ff00',
-        net: '#003300'
-    },
-    light: {
-        background: '#f5f5f5',
-        paddle: '#2196f3',
-        ball: '#03a9f4',
-        net: '#2196f3'
-    },
-    dark: {
-        background: '#121212',
-        paddle: '#bb86fc',
-        ball: '#03dac6',
-        net: '#bb86fc'
-    }
-};
-
-let currentTheme = themes.arcade;
-
-function startGame() {
-    if(!gameStarted) {
-        gameStarted = true;
-        gamePaused = false;
-        ball.inPlay = true;
-        gameLoop();
-    }
-}
-
-function update() {
-    if(!gameStarted || gamePaused) return;
-    
-    movePaddle(user, wPressed, sPressed);
-    
-    if(isTwoPlayer && rightPlayerIsHuman) {
-        movePaddle(ai, upArrowPressed, downArrowPressed);
-    } else {
-        moveAI();
-    }
-    
-    updateBall();
-}
-
-function gameLoop() {
-    if(!gamePaused) {
-        update();
-        render();
-        requestAnimationFrame(gameLoop);
-    }
-}
-
-
-
-function resetGame() {
-    user.score = 0;
-    ai.score = 0;
-    updateScores();
-    resetBall();
-    gameStarted = false;
-    gamePaused = false;
-}
-
-function updateScores() {
-    document.getElementById('player-score').textContent = user.score;
-    document.getElementById('ai-score').textContent = ai.score;
-}
-
-function togglePause() {
-    gamePaused = !gamePaused;
-    if(!gamePaused) {
-        gameLoop();
-    }
-}
-
-document.getElementById('start-btn').addEventListener('click', () => {
-    if(!gameStarted) startGame();
-    else if(!ball.inPlay) ball.inPlay = true;
-});
-
-document.getElementById('pause-btn').addEventListener('click', togglePause);
-document.getElementById('reset-btn').addEventListener('click', resetGame);
-
 function movePaddle(paddle, upPressed, downPressed) {
     if(upPressed && paddle.y > 0) {
         paddle.y -= paddle.speed;
@@ -234,9 +149,9 @@ function moveAI() {
     
     if(Math.abs(difference) > ai.speed) {
         if(difference > 0) {
-            ai.y += ai.speed * 0.09;
+            ai.y += ai.speed * difficultyLevel;
         } else {
-            ai.y -= ai.speed * 0.09;
+            ai.y -= ai.speed * difficultyLevel;
         }
     }
 }
@@ -262,22 +177,31 @@ function updateBall() {
     ball.y += ball.velocityY;
     
     if(ball.y + ball.radius >= canvas.height || ball.y - ball.radius <= 0) {
+        wallHitSound.play().catch(() => {});
         ball.velocityY = -ball.velocityY;
     }
     
-    if(ball.x + ball.radius >= canvas.width) {
-        user.score += 1;
-        updateScores();
-        resetBall();
-    }
-    if(ball.x - ball.radius <= 0) {
-        ai.score += 1;
-        updateScores();
-        resetBall();
+    const currentTime = Date.now();
+    if(currentTime - lastScoreTime >= scoreDelay) {
+        if(ball.x + ball.radius >= canvas.width) {
+            scoreSound.play().catch(() => {});
+            user.score += 1;
+            updateScores();
+            lastScoreTime = currentTime;
+            resetBall();
+        }
+        if(ball.x - ball.radius <= 0) {
+            scoreSound.play().catch(() => {});
+            ai.score += 1;
+            updateScores();
+            lastScoreTime = currentTime;
+            resetBall();
+        }
     }
     
     const player = (ball.x < canvas.width / 2) ? user : ai;
     if(collisionDetect(player, ball)) {
+        hitSound.play().catch(() => {});
         let angle = 0;
         
         if(ball.y < (player.y + player.height / 2)) {
@@ -290,6 +214,79 @@ function updateBall() {
         ball.velocityY = ball.speed * Math.sin(angle);
         ball.speed += 0.2;
     }
+}
+
+function update() {
+    if(!gameStarted || gamePaused) return;
+    
+    movePaddle(user, wPressed, sPressed);
+    
+    if(isTwoPlayer && rightPlayerIsHuman) {
+        movePaddle(ai, upArrowPressed, downArrowPressed);
+    } else {
+        moveAI();
+    }
+    
+    updateBall();
+}
+
+function render() {
+    ctx.fillStyle = currentTheme.background;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    drawNet();
+    drawPaddle(user.x, user.y, user.width, user.height, currentTheme.paddle);
+    drawPaddle(ai.x, ai.y, ai.width, ai.height, currentTheme.paddle);
+    drawBall();
+}
+
+function startGame() {
+    if(!gameStarted) {
+        gameStarted = true;
+        gamePaused = false;
+        ball.inPlay = true;
+        gameLoop();
+    }
+}
+
+function togglePause() {
+    gamePaused = !gamePaused;
+    if(!gamePaused) {
+        gameLoop();
+    }
+}
+
+function resetGame() {
+    user.score = 0;
+    ai.score = 0;
+    updateScores();
+    resetBall();
+    gameStarted = false;
+    gamePaused = false;
+}
+
+function updateScores() {
+    document.getElementById('player-score').textContent = user.score;
+    document.getElementById('ai-score').textContent = ai.score;
+}
+
+function gameLoop() {
+    if(!gamePaused) {
+        update();
+        render();
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+function setTheme(themeName) {
+    currentTheme = themes[themeName];
+    document.body.className = `theme-${themeName}`;
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.getAttribute('data-theme') === themeName) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function setupControls() {
@@ -316,5 +313,39 @@ function setupControls() {
         }
     });
 }
-render();
+
+document.getElementById('one-player').addEventListener('click', () => {
+    isTwoPlayer = false;
+    rightPlayerIsHuman = false;
+    document.getElementById('right-player').textContent = 'CPU';
+    document.getElementById('main-menu').classList.remove('active');
+    document.getElementById('game-container').style.display = 'flex';
+    initCanvas();
+});
+
+document.getElementById('two-player').addEventListener('click', () => {
+    isTwoPlayer = true;
+    rightPlayerIsHuman = true;
+    document.getElementById('right-player').textContent = 'PLAYER 2';
+    document.getElementById('main-menu').classList.remove('active');
+    document.getElementById('game-container').style.display = 'flex';
+    initCanvas();
+});
+
+document.getElementById('start-btn').addEventListener('click', () => {
+    if(!gameStarted) startGame();
+    else if(!ball.inPlay) ball.inPlay = true;
+});
+
+document.getElementById('pause-btn').addEventListener('click', togglePause);
+document.getElementById('reset-btn').addEventListener('click', resetGame);
+
+document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.addEventListener('click', () => setTheme(btn.getAttribute('data-theme')));
+});
+
+window.addEventListener('resize', initCanvas);
+
 setupControls();
+initCanvas();
+render();
