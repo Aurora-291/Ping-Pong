@@ -137,7 +137,11 @@ function update() {
     
     if(isTwoPlayer && rightPlayerIsHuman) {
         movePaddle(ai, upArrowPressed, downArrowPressed);
+    } else {
+        moveAI();
     }
+    
+    updateBall();
 }
 
 function gameLoop() {
@@ -185,6 +189,71 @@ function movePaddle(paddle, upPressed, downPressed) {
     }
     if(downPressed && paddle.y < canvas.height - paddle.height) {
         paddle.y += paddle.speed;
+    }
+}
+
+function moveAI() {
+    const aiCenter = ai.y + ai.height / 2;
+    const ballCenter = ball.y;
+    const difference = ballCenter - aiCenter;
+    
+    if(Math.abs(difference) > ai.speed) {
+        if(difference > 0) {
+            ai.y += ai.speed * 0.09;
+        } else {
+            ai.y -= ai.speed * 0.09;
+        }
+    }
+}
+
+function collisionDetect(player, ball) {
+    const playerTop = player.y;
+    const playerBottom = player.y + player.height;
+    const playerLeft = player.x;
+    const playerRight = player.x + player.width;
+    
+    const ballTop = ball.y - ball.radius;
+    const ballBottom = ball.y + ball.radius;
+    const ballLeft = ball.x - ball.radius;
+    const ballRight = ball.x + ball.radius;
+    
+    return ballRight > playerLeft && ballLeft < playerRight && ballBottom > playerTop && ballTop < playerBottom;
+}
+
+function updateBall() {
+    if(!ball.inPlay) return;
+    
+    ball.x += ball.velocityX;
+    ball.y += ball.velocityY;
+    
+    if(ball.y + ball.radius >= canvas.height || ball.y - ball.radius <= 0) {
+        ball.velocityY = -ball.velocityY;
+    }
+    
+    if(ball.x + ball.radius >= canvas.width) {
+        user.score += 1;
+        updateScores();
+        resetBall();
+    }
+    if(ball.x - ball.radius <= 0) {
+        ai.score += 1;
+        updateScores();
+        resetBall();
+    }
+    
+    const player = (ball.x < canvas.width / 2) ? user : ai;
+    if(collisionDetect(player, ball)) {
+        let angle = 0;
+        
+        if(ball.y < (player.y + player.height / 2)) {
+            angle = -1 * Math.PI / 4;
+        } else if(ball.y > (player.y + player.height / 2)) {
+            angle = Math.PI / 4;
+        }
+        
+        ball.velocityX = (player === user ? 1 : -1) * ball.speed * Math.cos(angle);
+        ball.velocityY = ball.speed * Math.sin(angle);
+        ball.speed += 0.2;
     }
 }
 
