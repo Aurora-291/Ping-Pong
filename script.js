@@ -3,6 +3,10 @@ const ctx = canvas.getContext('2d');
 
 let isTwoPlayer = false;
 let rightPlayerIsHuman = false;
+let upArrowPressed = false;
+let downArrowPressed = false;
+let wPressed = false;
+let sPressed = false;
 
 function initCanvas() {
     canvas.width = Math.min(window.innerWidth * 0.8, 800);
@@ -121,22 +125,92 @@ function startGame() {
     if(!gameStarted) {
         gameStarted = true;
         gamePaused = false;
-        console.log('Game started');
+        ball.inPlay = true;
+        gameLoop();
     }
+}
+
+function update() {
+    if(!gameStarted || gamePaused) return;
+    
+    movePaddle(user, wPressed, sPressed);
+    
+    if(isTwoPlayer && rightPlayerIsHuman) {
+        movePaddle(ai, upArrowPressed, downArrowPressed);
+    }
+}
+
+function gameLoop() {
+    if(!gamePaused) {
+        update();
+        render();
+        requestAnimationFrame(gameLoop);
+    }
+}
+
+
+
+function resetGame() {
+    user.score = 0;
+    ai.score = 0;
+    updateScores();
+    resetBall();
+    gameStarted = false;
+    gamePaused = false;
+}
+
+function updateScores() {
+    document.getElementById('player-score').textContent = user.score;
+    document.getElementById('ai-score').textContent = ai.score;
 }
 
 function togglePause() {
     gamePaused = !gamePaused;
-    console.log('Game paused:', gamePaused);
+    if(!gamePaused) {
+        gameLoop();
+    }
 }
 
-function resetGame() {
-    gameStarted = false;
-    gamePaused = false;
-    console.log('Game reset');
-}
+document.getElementById('start-btn').addEventListener('click', () => {
+    if(!gameStarted) startGame();
+    else if(!ball.inPlay) ball.inPlay = true;
+});
 
-document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('pause-btn').addEventListener('click', togglePause);
 document.getElementById('reset-btn').addEventListener('click', resetGame);
+
+function movePaddle(paddle, upPressed, downPressed) {
+    if(upPressed && paddle.y > 0) {
+        paddle.y -= paddle.speed;
+    }
+    if(downPressed && paddle.y < canvas.height - paddle.height) {
+        paddle.y += paddle.speed;
+    }
+}
+
+function setupControls() {
+    window.addEventListener('keydown', e => {
+        switch(e.key.toLowerCase()) {
+            case 'w': wPressed = true; break;
+            case 's': sPressed = true; break;
+            case 'arrowup': upArrowPressed = true; break;
+            case 'arrowdown': downArrowPressed = true; break;
+            case ' ':
+                if(!gameStarted) startGame();
+                else if(!ball.inPlay) ball.inPlay = true;
+                break;
+            case 'p': togglePause(); break;
+        }
+    });
+
+    window.addEventListener('keyup', e => {
+        switch(e.key.toLowerCase()) {
+            case 'w': wPressed = false; break;
+            case 's': sPressed = false; break;
+            case 'arrowup': upArrowPressed = false; break;
+            case 'arrowdown': downArrowPressed = false; break;
+        }
+    });
+}
 render();
+setupControls();
