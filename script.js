@@ -20,6 +20,7 @@ document.getElementById('one-player').addEventListener('click', () => {
 document.getElementById('two-player').addEventListener('click', () => {
     isTwoPlayer = true;
     rightPlayerIsHuman = true;
+    document.getElementById('right-player').textContent = 'PLAYER 2';
     document.getElementById('main-menu').classList.remove('active');
     document.getElementById('game-container').style.display = 'flex';
     initCanvas();
@@ -27,3 +28,29 @@ document.getElementById('two-player').addEventListener('click', () => {
 
 window.addEventListener('resize', initCanvas);
 initCanvas();
+
+let gameStarted = false;
+let gamePaused = false;
+
+function startGame() {
+    if(!gameStarted) {
+        gameStarted = true;
+        gamePaused = false;
+        console.log('Game started');
+    }
+}
+
+function togglePause() {
+    gamePaused = !gamePaused;
+    console.log('Game paused:', gamePaused);
+}
+
+function resetGame() {
+    gameStarted = false;
+    gamePaused = false;
+    console.log('Game reset');
+}
+
+document.getElementById('start-btn').addEventListener('click', startGame);
+document.getElementById('pause-btn').addEventListener('click', togglePause);
+document.getElementById('reset-btn').addEventListener('click', resetGame);
